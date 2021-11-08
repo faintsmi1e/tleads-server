@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node ./dist",
+    "dev": "concurrently \"tsc -w\" \"nodemon --ignore ./files/ ./dist\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
