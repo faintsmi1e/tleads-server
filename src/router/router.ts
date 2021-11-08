@@ -3,6 +3,7 @@ import LeadController from "../controllers/LeadController";
 
 const router = Router();
 
-router.get('/events',LeadController.getAll);
+router.get('/leads',LeadController.getAll);
+router.get('/leads/:authKey',LeadController.authorization);
 
 export default router;
