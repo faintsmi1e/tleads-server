@@ -1,6 +1,7 @@
 import axios from 'axios';
 import $api from '../api';
 import { LocalStorage } from 'node-localstorage';
+import { ParsedQs } from 'qs';
 class AmoService {
   static async authorization(authKey: string) {
     const localStorage = new LocalStorage('./scratch');
@@ -15,13 +16,14 @@ class AmoService {
       }
     );
     localStorage.setItem('acessToken', response.data.access_token);
-    localStorage.setItem('acessToken', response.data.refresh_token);
+    localStorage.setItem('refreshToken', response.data.refresh_token);
     console.log(localStorage.getItem('acessToken'))
     return response.data;
   }
 
-  static async getLeads() {
-    const response = await $api.get('api/v4/account');
+  static async getLeads(query: ParsedQs) {
+    
+    const response = await $api.get('api/v4/leads');
     return response.data;
   }
 }

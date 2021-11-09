@@ -5,7 +5,8 @@ import {LocalStorage} from 'node-localstorage'
 class LeadController {
   async getAll(req: express.Request, res: express.Response) {
     try {
-      const leads = await AmoServise.getLeads();
+      const query = req.query
+      const leads = await AmoServise.getLeads(query);
       res.json(leads);
     } catch (e) {
       console.log(e);
