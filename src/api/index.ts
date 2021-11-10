@@ -11,20 +11,28 @@ const $api = axios.create({
 $api.interceptors.request.use((config) => {
   const localStorage = new LocalStorage('./scratch');
 
-  config.headers.Authorization = `Bearer ${localStorage.getItem('acessToken')}`;
+  config.headers.Authorization = `Bearer ${localStorage.getItem(
+    'accessToken'
+  )}`;
 
   return config;
 });
 
-$api.interceptors.request.use(
+$api.interceptors.response.use(
   (config) => {
     return config;
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status == 401 && error.config && !error.config._isRetry) {
+    if (
+      error.response.status == 401 &&
+      error.config &&
+      !error.config._isRetry
+    ) {
       originalRequest._isRetry = true;
       try {
+        const localStorage = new LocalStorage('./scratch');
+        console.log('try');
         const response = await axios.post(API_URL + '/oauth2/access_token', {
           client_id: process.env.CLIENT_ID,
           client_secret: process.env.CLIENT_SECRET,
@@ -32,7 +40,7 @@ $api.interceptors.request.use(
           refresh_token: localStorage.getItem('refreshToken'),
           redirect_uri: process.env.REDIRECT_URI,
         });
-        localStorage.setItem('acessToken', response.data.access_token);
+        localStorage.setItem('accessToken', response.data.access_token);
         localStorage.setItem('refreshToken', response.data.refresh_token);
         return $api.request(originalRequest);
       } catch (e) {
