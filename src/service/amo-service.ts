@@ -28,11 +28,12 @@ class AmoService {
     let response: AxiosResponse
     if (query.query && typeof query.query === 'string') {
       const encodedQuery = encodeURI(query.query)
-      console.log(String(encodedQuery))
-      response = await $api.get(`api/v4/leads?query=${encodedQuery}`);
+      
+      console.log(`api/v4/leads?query=` + encodedQuery)
+      response = await $api.get(`api/v4/leads?with=contacts&query=` + encodedQuery);
       console.log(response.data)
     }else {
-      response = await $api.get('api/v4/leads');
+      response = await $api.get('api/v4/leads?with=contacts');
     }
     
     
