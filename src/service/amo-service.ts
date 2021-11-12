@@ -20,28 +20,28 @@ class AmoService {
     );
     localStorage.setItem('accessToken', response.data.access_token);
     localStorage.setItem('refreshToken', response.data.refresh_token);
-    console.log(localStorage.getItem('accessToken'))
+    console.log(localStorage.getItem('accessToken'));
     return response.data;
   }
 
   static async getLeads(query: ParsedQs) {
-    let response: AxiosResponse
+    let response: AxiosResponse;
     if (query.query && typeof query.query === 'string') {
-      const encodedQuery = encodeURI(query.query)
-      
-      console.log(`api/v4/leads?query=` + encodedQuery)
+      const encodedQuery = encodeURI(query.query);
+
       response = await $api.get(`api/v4/leads?with=contacts&query=` + encodedQuery);
-      console.log(response.data)
-    }else {
+    } else {
       response = await $api.get('api/v4/leads?with=contacts');
     }
-    
-    
-    const dataWithStatuses = await StatusService.getStatusesById(response.data)
-    
-    const [constacts, responsibleUsers] = await Promise.all([ContactService.getContacts(),ResponsibleService.getUsers(dataWithStatuses)]);
-    
-    dataWithStatuses._embedded.contacts = constacts
+
+    const dataWithStatuses = await StatusService.getStatusesById(response.data);
+
+    const [constacts, responsibleUsers] = await Promise.all([
+      ContactService.getContacts(),
+      ResponsibleService.getUsers(dataWithStatuses),
+    ]);
+
+    dataWithStatuses._embedded.contacts = constacts;
     return dataWithStatuses;
   }
 }
