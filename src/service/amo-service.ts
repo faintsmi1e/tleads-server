@@ -35,13 +35,13 @@ class AmoService {
     }
 
     const dataWithStatuses = await StatusService.getStatusesById(response.data);
-
+    console.log(dataWithStatuses)
     const [constacts, responsibleUsers] = await Promise.all([
-      ContactService.getContacts(),
+      ContactService.getContacts(dataWithStatuses),
       ResponsibleService.getUsers(dataWithStatuses),
     ]);
 
-    dataWithStatuses._embedded.contacts = constacts;
+    
     return dataWithStatuses;
   }
 }
